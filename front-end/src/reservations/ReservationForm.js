@@ -5,6 +5,8 @@ import { today } from "../utils/date-time";
 import classNames from "../utils/classNames";
 import isFutureDate from "../utils/validation/isFutureDate";
 import isNotTuesday from "../utils/validation/isNotTuesday";
+import isDuringBusinessHours from "../utils/validation/isDuringBusinessHours";
+import isFutureTime from "../utils/validation/isFutureTime";
 
 function ReservationForm() {
   const history = useHistory();
@@ -17,6 +19,11 @@ function ReservationForm() {
     tuesdayError: {
       isError: false,
       errorMessage: "Sorry, we are closed on Tuesdays.",
+    },
+    hoursError: {
+      isError: false,
+      errorMessage:
+        "Sorry, the reservation time must be in the future, between 10:30AM and 9:30AM.",
     },
   };
   const initialFormState = {
@@ -43,7 +50,7 @@ function ReservationForm() {
     event.preventDefault();
     errorExists = false;
     setErrors({ ...initialErrorState });
-    const { reservation_date } = formData;
+    const { reservation_date, reservation_time } = formData;
 
     if (!isFutureDate(reservation_date)) {
       setErrors((errors) => {
@@ -59,6 +66,24 @@ function ReservationForm() {
         return {
           ...errors,
           tuesdayError: { ...errors.tuesdayError, isError: true },
+        };
+      });
+      errorExists = true;
+    }
+    if (!isFutureTime(reservation_date, reservation_time)) {
+      setErrors((errors) => {
+        return {
+          ...errors,
+          pastDateError: { ...errors.pastDateError, isError: true },
+        };
+      });
+      errorExists = true;
+    }
+    if (!isDuringBusinessHours(reservation_time)) {
+      setErrors((errors) => {
+        return {
+          ...errors,
+          hoursError: { ...errors.hoursError, isError: true },
         };
       });
       errorExists = true;
@@ -93,7 +118,15 @@ function ReservationForm() {
       >
         {errors.tuesdayError.errorMessage}
       </div>
-
+      <div
+        className={classNames({
+          "d-none": !errors.hoursError.isError,
+          alert: errors.hoursError.isError,
+          "alert-danger": errors.hoursError.isError,
+        })}
+      >
+        {errors.hoursError.errorMessage}
+      </div>
       <form onSubmit={handleSubmit}>
         <label htmlFor="first_name">
           First name:
