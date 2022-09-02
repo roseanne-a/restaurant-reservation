@@ -8,6 +8,7 @@ const bodyHasProperty = require("../errors/bodyHasProperty");
 const isValidDate = require("../errors/isValidDate");
 const isValidTime = require("../errors/isValidTime");
 const isValidNumberOfPeople = require("../errors/isValidNumberOfPeople");
+const reservationExists = require("../errors/reservationExists");
 
 async function list(req, res) {
   const { date } = req.query;
@@ -16,6 +17,12 @@ async function list(req, res) {
   res.json({
     data: listOfRes,
   });
+}
+
+function read(req, res) {
+  let reservation = res.locals.reservation;
+
+  res.json({ data: reservation });
 }
 
 async function create(req, res) {
@@ -28,6 +35,7 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
+  read: [asyncErrorBoundary(reservationExists), read],
   create: [
     bodyHasProperty("first_name"),
     bodyHasProperty("last_name"),

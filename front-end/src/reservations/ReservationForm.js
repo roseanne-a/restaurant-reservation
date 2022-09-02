@@ -8,7 +8,7 @@ import isNotTuesday from "../utils/validation/isNotTuesday";
 import isDuringBusinessHours from "../utils/validation/isDuringBusinessHours";
 import isFutureTime from "../utils/validation/isFutureTime";
 
-function ReservationForm() {
+function ReservationForm({ reservations, setReservations }) {
   const history = useHistory();
   const initialErrorState = {
     pastDateError: {
@@ -89,10 +89,17 @@ function ReservationForm() {
       errorExists = true;
     }
     if (!errorExists) {
+      console.log(reservations);
       formData.people = Number(formData.people);
       createReservation(formData)
+        .then((result) => setReservations([reservations, result]))
         .then(setFormData({ ...initialFormState }))
-        .then(history.push(`/dashboard?date=${reservation_date}`));
+        .then(
+          history.push({
+            pathname: `/dashboard`,
+            search: `?date=${reservation_date}`,
+          })
+        );
     }
   };
 
