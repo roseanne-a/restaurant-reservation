@@ -7,8 +7,7 @@ import ReservationForm from "../reservations/ReservationForm";
 import { today } from "../utils/date-time";
 import TableForm from "../tables/TableForm";
 import Seat from "../reservations/Seat";
-import { listReservations } from "../utils/api";
-import { listTables } from "../utils/api";
+import { listReservations, listTables, removeReservation } from "../utils/api";
 import useQuery from "../utils/useQuery";
 
 /**
@@ -20,6 +19,7 @@ import useQuery from "../utils/useQuery";
  */
 
 function Routes() {
+  //const history = useHistory();
   const query = useQuery();
   let dateQuery = query.get("date");
   let date = today();
@@ -43,6 +43,19 @@ function Routes() {
     }
     loadReservations();
   }, [date]);
+
+  const handleFinish = async (tableId) => {
+    if (
+      window.confirm(
+        "Is this table ready to seat new guests? This cannot be undone."
+      )
+    ) {
+      await removeReservation(tableId);
+      setTables(await listTables());
+    } else {
+      return;
+    }
+  };
 
   // function loadDashboard({reservations, tables}) {
   //   console.log("loaded");
@@ -82,10 +95,12 @@ function Routes() {
       </Route>
       <Route path="/dashboard">
         <Dashboard
+          date={date}
           reservations={reservations}
           tables={tables}
           setReservations={setReservations}
           setTables={setTables}
+          handleFinish={handleFinish}
         />
       </Route>
       <Route>

@@ -44,6 +44,23 @@ async function update(req, res, next) {
   }
 }
 
+async function removeReservation(req, res, next) {
+  const { table_id } = req.params;
+
+  const { table } = res.locals;
+
+  if (!table.reservation_id) {
+    next({
+      status: 400,
+      message: `Table ${table_id} is not occupied. Nothing was changed.`,
+    });
+  } else {
+    const updatedTable = await service.removeReservation(table_id);
+
+    res.json({ data: updatedTable });
+  }
+}
+
 module.exports = {
   list,
   create: [
@@ -58,5 +75,9 @@ module.exports = {
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(update),
+  ],
+  removeReservation: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(removeReservation),
   ],
 };

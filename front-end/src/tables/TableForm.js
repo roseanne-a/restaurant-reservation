@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createTable } from "../utils/api";
 import classNames from "../utils/classNames";
-import { today } from "../utils/date-time";
 
 export default function TableForm({ tables, setTables }) {
   const history = useHistory();

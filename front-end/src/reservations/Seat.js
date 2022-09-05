@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory, useLocation } from "react-router";
-import { listTables, getReservation, editTableReservation } from "../utils/api";
+import { useParams, useHistory } from "react-router";
+import { getReservation, editTableReservation } from "../utils/api";
 import classNames from "../utils/classNames";
 import ErrorAlert from "../layout/ErrorAlert";
 
