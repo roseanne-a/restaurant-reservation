@@ -22,4 +22,10 @@ function update(tableId, reservationId) {
     .returning("*");
 }
 
-module.exports = { read, list, create, update };
+function removeReservation(tableId) {
+  return knex("tables")
+    .where({ table_id: tableId })
+    .update({ reservation_id: null });
+}
+
+module.exports = { read, list, create, update, removeReservation };

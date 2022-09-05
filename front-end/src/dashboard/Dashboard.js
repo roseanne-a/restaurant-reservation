@@ -1,7 +1,9 @@
-import React from "react";
-import ErrorAlert from "../layout/ErrorAlert";
+import React, { useEffect } from "react";
+import { useParams, useHistory } from "react-router";
+//import ErrorAlert from "../layout/ErrorAlert";
 import Reservation from "../reservations/Reservation";
 import Table from "../tables/Table";
+import DateNav from "../reservations/DateNav";
 
 /**
  * Defines the dashboard page.
@@ -9,7 +11,9 @@ import Table from "../tables/Table";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ reservations, tables }) {
+function Dashboard({ date, reservations, tables, handleFinish }) {
+  const history = useHistory();
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -25,13 +29,20 @@ function Dashboard({ reservations, tables }) {
           />
         ))}
       </section>
+      <nav>
+        <DateNav date={date} />
+      </nav>
       <section>
         <div className="d-md-flex mb-3">
           <h4 className="mb-0">All Tables</h4>
         </div>
         {/* <ErrorAlert error={tablesError} /> */}
         {tables.map((table) => (
-          <Table key={table.table_id} table={table} />
+          <Table
+            key={table.table_id}
+            table={table}
+            handleFinish={handleFinish}
+          />
         ))}
       </section>
     </main>
