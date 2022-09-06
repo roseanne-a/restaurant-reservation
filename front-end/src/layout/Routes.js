@@ -4,9 +4,10 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import ReservationForm from "../reservations/ReservationForm";
+import Seat from "../reservations/Seat";
+import Search from "../search/Search";
 import { today } from "../utils/date-time";
 import TableForm from "../tables/TableForm";
-import Seat from "../reservations/Seat";
 import { listReservations, listTables } from "../utils/api";
 import useQuery from "../utils/useQuery";
 
@@ -86,6 +87,11 @@ function Routes() {
           setTables={setTables}
         />
       </Route>
+
+      <Route path="/search">
+        <Search />
+      </Route>
+
       <Route>
         <NotFound />
       </Route>
