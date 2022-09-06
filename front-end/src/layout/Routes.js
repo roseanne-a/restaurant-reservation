@@ -7,7 +7,7 @@ import ReservationForm from "../reservations/ReservationForm";
 import { today } from "../utils/date-time";
 import TableForm from "../tables/TableForm";
 import Seat from "../reservations/Seat";
-import { listReservations, listTables, removeReservation } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import useQuery from "../utils/useQuery";
 
 /**
@@ -29,33 +29,14 @@ function Routes() {
   const [tables, setTables] = useState([]);
 
   useEffect(() => {
-    async function loadTables() {
-      const newTables = await listTables();
-      setTables(newTables);
-    }
-    loadTables();
-  }, []);
-
-  useEffect(() => {
-    async function loadReservations() {
+    async function loadReservationsAndTables() {
       const newReservations = await listReservations({ date });
-      setReservations(newReservations);
+      const newTables = await listTables();
+      setReservations([...newReservations]);
+      setTables([...newTables]);
     }
-    loadReservations();
+    loadReservationsAndTables();
   }, [date]);
-
-  const handleFinish = async (tableId) => {
-    if (
-      window.confirm(
-        "Is this table ready to seat new guests? This cannot be undone."
-      )
-    ) {
-      await removeReservation(tableId);
-      setTables(await listTables());
-    } else {
-      return;
-    }
-  };
 
   // function loadDashboard({reservations, tables}) {
   //   console.log("loaded");
@@ -75,7 +56,10 @@ function Routes() {
         <Redirect to={"/dashboard"} />
       </Route>
       <Route path="/reservations/new">
-        <ReservationForm />
+        <ReservationForm
+          setReservations={setReservations}
+          reservations={reservations}
+        />
       </Route>
       <Route path="/reservations/:reservation_id/seat">
         <Seat
@@ -100,7 +84,6 @@ function Routes() {
           tables={tables}
           setReservations={setReservations}
           setTables={setTables}
-          handleFinish={handleFinish}
         />
       </Route>
       <Route>

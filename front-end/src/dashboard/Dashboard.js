@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams, useHistory } from "react-router";
+import { useHistory } from "react-router";
 //import ErrorAlert from "../layout/ErrorAlert";
 import Reservation from "../reservations/Reservation";
 import Table from "../tables/Table";
@@ -11,9 +11,7 @@ import DateNav from "../reservations/DateNav";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date, reservations, tables, handleFinish }) {
-  const history = useHistory();
-
+function Dashboard({ date, reservations, tables, setTables }) {
   return (
     <main>
       <h1>Dashboard</h1>
@@ -41,7 +39,9 @@ function Dashboard({ date, reservations, tables, handleFinish }) {
           <Table
             key={table.table_id}
             table={table}
-            handleFinish={handleFinish}
+            tables={tables}
+            setTables={setTables}
+            // handleFinish={handleFinish}
           />
         ))}
       </section>

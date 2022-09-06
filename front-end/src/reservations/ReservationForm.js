@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
-import { today } from "../utils/date-time";
+import { today, formatAsDate } from "../utils/date-time";
 import classNames from "../utils/classNames";
 import isFutureDate from "../utils/validation/isFutureDate";
 import isNotTuesday from "../utils/validation/isNotTuesday";
@@ -89,15 +89,14 @@ function ReservationForm({ reservations, setReservations }) {
       errorExists = true;
     }
     if (!errorExists) {
-      console.log(reservations);
       formData.people = Number(formData.people);
       createReservation(formData)
-        .then((result) => setReservations([reservations, result]))
+        .then((result) => setReservations([...reservations, result]))
         .then(setFormData({ ...initialFormState }))
         .then(
           history.push({
             pathname: `/dashboard`,
-            search: `?date=${reservation_date}`,
+            search: `?date=${formatAsDate(reservation_date)}`,
           })
         );
     }

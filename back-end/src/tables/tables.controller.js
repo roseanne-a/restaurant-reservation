@@ -1,4 +1,5 @@
 const service = require("./tables.service");
+const resService = require("../reservations/reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const bodyHasProperty = require("../errors/bodyHasProperty");
 const isValidTableName = require("../errors/isValidTableName");
@@ -22,7 +23,8 @@ async function create(req, res, next) {
 
 async function update(req, res, next) {
   const { reservation_id } = req.body.data;
-  const { table_id } = req.params;
+  let { table_id } = req.params;
+  table_id = Number(table_id);
 
   const { people } = res.locals.reservation;
   const { capacity } = res.locals.table;
@@ -36,6 +38,11 @@ async function update(req, res, next) {
     next({
       status: 400,
       message: `that table is currently occupied`,
+    });
+  } else if (res.locals.reservation.status === "seated") {
+    next({
+      status: 400,
+      message: `That reservation is currently seated`,
     });
   } else {
     const updatedTable = await service.update(table_id, reservation_id);
@@ -55,7 +62,10 @@ async function removeReservation(req, res, next) {
       message: `Table ${table_id} is not occupied. Nothing was changed.`,
     });
   } else {
-    const updatedTable = await service.removeReservation(table_id);
+    const updatedTable = await service.removeReservation(
+      table_id,
+      table.reservation_id
+    );
 
     res.json({ data: updatedTable });
   }
