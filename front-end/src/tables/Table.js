@@ -1,6 +1,28 @@
 import React from "react";
+import { useHistory } from "react-router";
+import { removeReservation } from "../utils/api";
 
-export default function Table({ table, handleFinish }) {
+export default function Table({ table, tables, setTables }) {
+  const history = useHistory();
+  const handleFinish = async (tableId) => {
+    if (
+      window.confirm(
+        "Is this table ready to seat new guests? This cannot be undone."
+      )
+    ) {
+      setTables(
+        tables.map((table) =>
+          table.table_id === tableId
+            ? { ...table, reservation_id: null }
+            : table
+        )
+      );
+      await removeReservation(tableId);
+      history.go(0);
+    } else {
+      return;
+    }
+  };
   return (
     <>
       <p>{table.table_name}</p>

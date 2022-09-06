@@ -2,12 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
 import { getReservation, editTableReservation } from "../utils/api";
 import classNames from "../utils/classNames";
+import { formatAsDate } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
-export default function Seat({ tables, setTables }) {
+export default function Seat({
+  reservations,
+  tables,
+  setTables,
+  setReservations,
+}) {
   const history = useHistory();
 
-  const { reservation_id } = useParams();
+  let { reservation_id } = useParams();
+  reservation_id = Number(reservation_id);
+
   const initialOverCapacityState = {
     isError: false,
     errorMessage:
@@ -20,7 +28,7 @@ export default function Seat({ tables, setTables }) {
   let errorExists = false;
 
   const [tablesError, setTablesError] = useState(null);
-  const [tableId, setTableId] = useState("");
+  const [tableId, setTableId] = useState(0);
   const [reservation, setReservation] = useState({});
   const [reservationError, setReservationError] = useState(null);
   const [capacityError, setCapacityError] = useState({
@@ -48,7 +56,7 @@ export default function Seat({ tables, setTables }) {
     setTableId(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     errorExists = false;
     setCapacityError({ ...initialOverCapacityState });
@@ -66,22 +74,29 @@ export default function Seat({ tables, setTables }) {
     }
 
     if (!errorExists) {
-      editTableReservation(Number(tableId), reservation_id)
-        .then(
-          setTables(
-            tables.map((table) =>
-              table.table_id === Number(tableId)
-                ? { ...table, reservation_id: reservation_id }
-                : table
-            )
-          )
-        )
-        .then(setTableId(""))
-        .then(
-          history.push({
-            pathname: `/dashboard`,
-          })
-        );
+      await editTableReservation(tableId, reservation_id);
+
+      // await setTables(
+      //   tables.map((table) =>
+      //     table.table_id === tableId
+      //       ? { ...table, reservation_id: reservation_id }
+      //       : table
+      //   )
+      // )
+
+      // await setReservations(
+      //   reservations.map((reservation) =>
+      //     reservation.reservation_id === reservation_id
+      //       ? { ...reservation, status: "seated" }
+      //       : reservation
+      //   )
+      // );
+      setTableId(0);
+
+      history.push({
+        pathname: `/dashboard`,
+        search: `?date=${formatAsDate(reservation.reservation_date)}`,
+      });
     }
   };
 
@@ -117,7 +132,7 @@ export default function Seat({ tables, setTables }) {
             onChange={handleTableIdChange}
             value={tableId}
           >
-            <option value="0">--- Select a table ---</option>
+            <option>--- Select a table ---</option>
             {tables.map((table) => (
               <option
                 value={table.table_id}
