@@ -73,6 +73,17 @@ export async function getReservation(reservationId, signal) {
   return await fetchJson(url, { headers, signal }, []);
 }
 
+export async function editReservation(reservationId, data, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservationId}`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data }),
+    signal,
+  };
+  return await fetchJson(url, options, {});
+}
+
 export async function createReservation(data, signal) {
   const url = `${API_BASE_URL}/reservations`;
   const options = {
@@ -84,12 +95,12 @@ export async function createReservation(data, signal) {
   return await fetchJson(url, options, {});
 }
 
-export async function updateReservationStatus(reservationId, signal) {
+export async function updateReservationStatus(reservationId, status, signal) {
   const url = `${API_BASE_URL}/reservations/${reservationId}/status`;
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ status: "finished" }),
+    body: JSON.stringify({ data: { status } }),
     signal,
   };
   return await fetchJson(url, options, {});

@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
-import ReservationForm from "../reservations/ReservationForm";
-import Seat from "../reservations/Seat";
+import Reservations from "../reservations/Reservations";
 import Search from "../search/Search";
 import { today } from "../utils/date-time";
 import TableForm from "../tables/TableForm";
 import { listReservations, listTables } from "../utils/api";
 import useQuery from "../utils/useQuery";
+import { useLocation } from "react-router";
 
 /**
  * Defines all the routes for the application.
@@ -56,14 +56,16 @@ function Routes() {
       <Route exact={true} path="/">
         <Redirect to={"/dashboard"} />
       </Route>
-      <Route path="/reservations/new">
-        <ReservationForm
+      <Route path="/reservations">
+        <Reservations
           setReservations={setReservations}
           reservations={reservations}
+          tables={tables}
         />
       </Route>
-      <Route path="/reservations/:reservation_id/seat">
-        <Seat
+      <Route path="/dashboard">
+        <Dashboard
+          date={date}
           reservations={reservations}
           tables={tables}
           setReservations={setReservations}
@@ -72,15 +74,6 @@ function Routes() {
       </Route>
       <Route path="/tables/new">
         <TableForm
-          reservations={reservations}
-          tables={tables}
-          setReservations={setReservations}
-          setTables={setTables}
-        />
-      </Route>
-      <Route path="/dashboard">
-        <Dashboard
-          date={date}
           reservations={reservations}
           tables={tables}
           setReservations={setReservations}

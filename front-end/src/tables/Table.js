@@ -10,13 +10,6 @@ export default function Table({ table, tables, setTables }) {
         "Is this table ready to seat new guests? This cannot be undone."
       )
     ) {
-      setTables(
-        tables.map((table) =>
-          table.table_id === tableId
-            ? { ...table, reservation_id: null }
-            : table
-        )
-      );
       await removeReservation(tableId);
       history.go(0);
     } else {

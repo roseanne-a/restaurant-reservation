@@ -22,10 +22,18 @@ function create(newReservation) {
     .then((createdRecords) => createdRecords[0]);
 }
 
+function update(reservationId, data) {
+  return knex("reservations")
+    .where({ reservation_id: reservationId })
+    .update(data)
+    .returning("*")
+    .then((createdRecords) => createdRecords[0]);
+}
+
 function updateStatus(reservationId, status) {
   return knex("reservations")
     .where({ reservation_id: reservationId })
-    .update({ status })
+    .update({ status: status })
     .returning("*")
     .then((createdRecords) => createdRecords[0]);
 
@@ -58,6 +66,7 @@ module.exports = {
   list,
   read,
   create,
+  update,
   updateStatus,
   search,
 };
