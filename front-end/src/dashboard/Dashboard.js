@@ -9,7 +9,7 @@ import DateNav from "../reservations/DateNav";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date, reservations, tables, setTables }) {
+function Dashboard({ date, reservations, tables, setTables, setReservations }) {
   return (
     <main>
       <h1>Dashboard</h1>
@@ -22,6 +22,8 @@ function Dashboard({ date, reservations, tables, setTables }) {
           <Reservation
             key={reservation.reservation_id}
             reservation={reservation}
+            reservations={reservations}
+            setReservations={setReservations}
           />
         ))}
       </section>

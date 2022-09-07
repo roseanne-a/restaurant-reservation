@@ -1,5 +1,5 @@
 function isNotFinished(req, res, next) {
-  const statues = ["booked", "seated", "finished"];
+  const statues = ["booked", "seated", "finished", "cancelled"];
   const { data: { status } = {} } = req.body;
   let reservation = res.locals.reservation;
   if (reservation.status === "finished") {

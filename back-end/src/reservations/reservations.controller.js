@@ -38,6 +38,16 @@ async function create(req, res) {
   });
 }
 
+async function update(req, res) {
+  const { data } = req.body;
+  const { reservation_id } = req.params;
+  const updatedReservation = await service.update(reservation_id, data);
+
+  res.status(200).json({
+    data: updatedReservation,
+  });
+}
+
 async function updateStatus(req, res, next) {
   let { status } = req.body.data;
   const { reservation_id } = req.params;
@@ -65,9 +75,24 @@ module.exports = {
     asyncErrorBoundary(isValidStatus),
     asyncErrorBoundary(create),
   ],
-  update: [
+  updateStatus: [
+    bodyHasProperty("status"),
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(isNotFinished),
     asyncErrorBoundary(updateStatus),
+  ],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    bodyHasProperty("first_name"),
+    bodyHasProperty("last_name"),
+    bodyHasProperty("mobile_number"),
+    bodyHasProperty("reservation_date"),
+    isValidDate,
+    bodyHasProperty("reservation_time"),
+    isValidTime,
+    bodyHasProperty("people"),
+    isValidNumberOfPeople,
+    asyncErrorBoundary(isValidStatus),
+    asyncErrorBoundary(update),
   ],
 };
