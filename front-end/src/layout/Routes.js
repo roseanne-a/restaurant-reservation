@@ -35,6 +35,7 @@ function Routes() {
 
   useEffect(() => {
     async function loadReservationsAndTables() {
+      const abortController = new AbortController();
       try {
         const newReservations = await listReservations({ date });
         const newTables = await listTables();
@@ -43,6 +44,7 @@ function Routes() {
       } catch (e) {
         setErrors(e);
       }
+      return () => abortController.abort();
     }
     loadReservationsAndTables();
   }, [date]);

@@ -70,22 +70,6 @@ export default function Seat({ tables }) {
 
     if (!errorExists) {
       await editTableReservation(tableId, reservation_id);
-
-      // await setTables(
-      //   tables.map((table) =>
-      //     table.table_id === tableId
-      //       ? { ...table, reservation_id: reservation_id }
-      //       : table
-      //   )
-      // )
-
-      // await setReservations(
-      //   reservations.map((reservation) =>
-      //     reservation.reservation_id === reservation_id
-      //       ? { ...reservation, status: "seated" }
-      //       : reservation
-      //   )
-      // );
       setTableId(0);
 
       history.push({

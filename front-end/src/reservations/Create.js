@@ -10,8 +10,9 @@ import {
 import classNames from "../utils/classNames";
 import { formatAsDate, today } from "../utils/date-time";
 import ReservationForm from "./ReservationForm";
+import { listReservations } from "../utils/api";
 
-export default function Create() {
+export default function Create({ setReservations }) {
   const history = useHistory();
 
   const initialFormState = {
@@ -45,7 +46,7 @@ export default function Create() {
   const [errors, setErrors] = useState({ ...initialErrorState });
   let errorExists = false;
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     errorExists = false;
     setErrors({ ...initialErrorState });
@@ -89,14 +90,15 @@ export default function Create() {
     }
     if (!errorExists) {
       newReservation.people = Number(newReservation.people);
-      createReservation(newReservation)
-        .then(setNewReservation({ ...initialFormState }))
-        .then(
-          history.push({
-            pathname: `/dashboard`,
-            search: `?date=${formatAsDate(reservation_date)}`,
-          })
-        );
+
+      await createReservation(newReservation);
+      setNewReservation({ ...initialFormState });
+      setReservations(await listReservations({ reservation_date }));
+
+      history.push({
+        pathname: `/dashboard`,
+        search: `?date=${formatAsDate(reservation_date)}`,
+      });
     }
   };
 
