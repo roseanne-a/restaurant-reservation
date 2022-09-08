@@ -1,9 +1,11 @@
-function isfutureDate(date) {
+function isFutureDate(date) {
   let [year, month, day] = date.split("-");
-  const reservationDate = new Date(year, month - 1, day, 0, 0, 0);
-  const today = new Date();
+  let [todayYear, todayMonth, todayDay] = today().split("-");
 
-  return reservationDate >= today;
+  const reservationDate = new Date(year, month - 1, day, 0, 0, 0);
+  const todayWithTime = new Date(todayYear, todayMonth - 1, todayDay, 0, 0, 0);
+
+  return reservationDate >= todayWithTime;
 }
 
 function isValidDate(req, res, next) {
@@ -19,7 +21,7 @@ function isValidDate(req, res, next) {
 
   if (isNaN(dateToCheck.getDate())) {
     next({ status: 400, message: `reservation_date is not a valid date` });
-  } else if (!isfutureDate(reservation_date)) {
+  } else if (!isFutureDate(reservation_date)) {
     next({
       status: 400,
       message: `reservation_date must be a date in the future`,
