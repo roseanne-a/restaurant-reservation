@@ -15,8 +15,8 @@ function ReservationForm({
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
+      <div className="form-group d-flex flex-column justify-content-center">
         <label htmlFor="first_name">
           First name:
           <input
@@ -26,6 +26,7 @@ function ReservationForm({
             onChange={handleChange}
             value={reservationData.first_name}
             required
+            className="form-control"
           />
         </label>
         <br />
@@ -38,6 +39,7 @@ function ReservationForm({
             onChange={handleChange}
             value={reservationData.last_name}
             required
+            className="form-control"
           />
         </label>
         <br />
@@ -51,6 +53,7 @@ function ReservationForm({
             onChange={handleChange}
             value={reservationData.mobile_number}
             required
+            className="form-control"
           />
         </label>
         <br />
@@ -63,6 +66,7 @@ function ReservationForm({
             onChange={handleChange}
             value={reservationData.reservation_date}
             required
+            className="form-control"
           />
         </label>
         <br />
@@ -75,6 +79,7 @@ function ReservationForm({
             onChange={handleChange}
             value={reservationData.reservation_time}
             required
+            className="form-control"
           />
         </label>
         <br />
@@ -87,15 +92,23 @@ function ReservationForm({
             onChange={handleChange}
             value={reservationData.people}
             required
+            className="form-control"
+            min="1"
           />
         </label>
-        <br />
-        <button type="submit">Submit</button>
-        <button type="button" onClick={() => history.goBack()}>
-          Cancel
-        </button>
-      </form>
-    </>
+      </div>
+      <br />
+      <button type="submit" className="btn btn-primary">
+        Submit
+      </button>
+      <button
+        type="button"
+        className="btn btn-secondary"
+        onClick={() => history.goBack()}
+      >
+        Cancel
+      </button>
+    </form>
   );
 }
 

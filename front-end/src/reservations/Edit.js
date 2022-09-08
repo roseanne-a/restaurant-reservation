@@ -3,18 +3,19 @@ import { useParams, useHistory } from "react-router";
 import { getReservation, editReservation } from "../utils/api";
 import formatReservationDate from "../utils/format-reservation-date";
 import formatReservationTime from "../utils/format-reservation-time";
-//import ErrorAlert from "../layout/ErrorAlert";
-import isFutureDate from "../utils/validation/isFutureDate";
+import ErrorAlert from "../layout/ErrorAlert";
+import {
+  isFutureDate,
+  isNotTuesday,
+  isDuringBusinessHours,
+  isFutureTime,
+} from "../utils/validDateAndTime";
 import classNames from "../utils/classNames";
-import isNotTuesday from "../utils/validation/isNotTuesday";
-import isDuringBusinessHours from "../utils/validation/isDuringBusinessHours";
-import isFutureTime from "../utils/validation/isFutureTime";
 import ReservationForm from "./ReservationForm";
 import { today, formatAsDate } from "../utils/date-time";
-//import { useLocation } from "react-router";
 import { listReservations } from "../utils/api";
 
-export default function Edit({ reservations, setReservations }) {
+export default function Edit({ setReservations }) {
   const { reservation_id } = useParams();
   const history = useHistory();
 
@@ -123,40 +124,44 @@ export default function Edit({ reservations, setReservations }) {
   };
 
   return (
-    <>
+    <section className="mb-5 d-flex flex-column">
       <h1>Edit Reservation</h1>
-      <div
-        className={classNames({
-          "d-none": !errors.pastDateError.isError,
-          alert: errors.pastDateError.isError,
-          "alert-danger": errors.pastDateError.isError,
-        })}
-      >
-        {errors.pastDateError.errorMessage}
+      <div className="container justify-content-center">
+        <div
+          className={classNames({
+            "d-none": !errors.pastDateError.isError,
+            alert: errors.pastDateError.isError,
+            "alert-danger": errors.pastDateError.isError,
+          })}
+        >
+          {errors.pastDateError.errorMessage}
+        </div>
+
+        <div
+          className={classNames({
+            "d-none": !errors.tuesdayError.isError,
+            alert: errors.tuesdayError.isError,
+            "alert-danger": errors.tuesdayError.isError,
+          })}
+        >
+          {errors.tuesdayError.errorMessage}
+        </div>
+        <div
+          className={classNames({
+            "d-none": !errors.hoursError.isError,
+            alert: errors.hoursError.isError,
+            "alert-danger": errors.hoursError.isError,
+          })}
+        >
+          {errors.hoursError.errorMessage}
+        </div>
       </div>
-      <div
-        className={classNames({
-          "d-none": !errors.tuesdayError.isError,
-          alert: errors.tuesdayError.isError,
-          "alert-danger": errors.tuesdayError.isError,
-        })}
-      >
-        {errors.tuesdayError.errorMessage}
-      </div>
-      <div
-        className={classNames({
-          "d-none": !errors.hoursError.isError,
-          alert: errors.hoursError.isError,
-          "alert-danger": errors.hoursError.isError,
-        })}
-      >
-        {errors.hoursError.errorMessage}
-      </div>
+      <ErrorAlert reservationError={reservationError} />
       <ReservationForm
         setReservationData={setReservation}
         reservationData={reservation}
         handleSubmit={handleSubmit}
       />
-    </>
+    </section>
   );
 }

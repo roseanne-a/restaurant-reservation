@@ -51,33 +51,44 @@ export default function TableForm({ tables, setTables }) {
         {capacityError.errorMessage}
       </div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="table_name">
-          Table name:
-          <input
-            id="table_name"
-            type="text"
-            name="table_name"
-            minLength="2"
-            onChange={handleTableNameChange}
-            value={tableName}
-            required
-          />
-        </label>
+        <div className="form-group d-flex flex-column justify-content-center">
+          <label htmlFor="table_name">
+            Table name:
+            <input
+              id="table_name"
+              type="text"
+              name="table_name"
+              minLength="2"
+              onChange={handleTableNameChange}
+              value={tableName}
+              required
+              className="form-control"
+            />
+          </label>
+          <br />
+          <label htmlFor="capacity">
+            Capacity:
+            <input
+              id="capacity"
+              type="number"
+              name="capacity"
+              onChange={handleCapacityChange}
+              value={capacity}
+              required
+              className="form-control"
+              min="1"
+            />
+          </label>
+        </div>
         <br />
-        <label htmlFor="capacity">
-          Capacity:
-          <input
-            id="capacity"
-            type="number"
-            name="capacity"
-            onChange={handleCapacityChange}
-            value={capacity}
-            required
-          />
-        </label>
-        <br />
-        <button type="submit">Submit</button>
-        <button type="button" onClick={() => history.goBack()}>
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => history.goBack()}
+        >
           Cancel
         </button>
       </form>

@@ -1,4 +1,47 @@
 .side-bar {
-  background-color: #393a44;
+  background-color: #430d4b;
   min-width: 200px;
+  min-height: 100vh;
+}
+
+body {
+  background-color: #f5d5e0;
+}
+
+.btn-color {
+  background-color: #430d4b;
+  color: white;
+  border: 2px solid white;
+  border-radius: 12px;
+}
+
+.btn-color:hover {
+  background-color: #4a478a; /* Green */
+  color: white;
+}
+
+.btn:active {
+  background-color: #4a478a;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.table-color {
+  background-color: #210535;
+  color: white;
+}
+
+.footer {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #7b337d;
+  color: white;
+  text-align: center;
+}
+
+.alert-danger {
+  color: white;
+  background-color: #a34b5e;
+  text-align: center;
 }

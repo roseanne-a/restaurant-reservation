@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-
 import { Redirect, Route, Switch } from "react-router-dom";
+
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
+import ErrorAlert from "./ErrorAlert";
 import Reservations from "../reservations/Reservations";
 import Search from "../search/Search";
-import { today } from "../utils/date-time";
 import TableForm from "../tables/TableForm";
+
+import { today } from "../utils/date-time";
 import { listReservations, listTables } from "../utils/api";
 import useQuery from "../utils/useQuery";
-import { useLocation } from "react-router";
+import Credits from "../site/Credits";
 
 /**
  * Defines all the routes for the application.
@@ -27,29 +29,23 @@ function Routes() {
   if (dateQuery) date = dateQuery;
 
   const [reservations, setReservations] = useState([]);
+
   const [tables, setTables] = useState([]);
+  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     async function loadReservationsAndTables() {
-      const newReservations = await listReservations({ date });
-      const newTables = await listTables();
-      setReservations([...newReservations]);
-      setTables([...newTables]);
+      try {
+        const newReservations = await listReservations({ date });
+        const newTables = await listTables();
+        setReservations([...newReservations]);
+        setTables([...newTables]);
+      } catch (e) {
+        setErrors(e);
+      }
     }
     loadReservationsAndTables();
   }, [date]);
-
-  // function loadDashboard({reservations, tables}) {
-  //   console.log("loaded");
-  //   const abortController = new AbortController();
-  //   setReservationsError(null);
-  //   setTablesError(null);
-  //   listReservations({ date }, abortController.signal)
-  //     .then(setReservations)
-  //     .catch(setReservationsError);
-  //   listTables(abortController.signal).then(setTables).catch(setTablesError);
-  //   return () => abortController.abort();
-  // }
 
   return (
     <Switch>
@@ -57,6 +53,7 @@ function Routes() {
         <Redirect to={"/dashboard"} />
       </Route>
       <Route path="/reservations">
+        <ErrorAlert errors={errors} />
         <Reservations
           setReservations={setReservations}
           reservations={reservations}
@@ -79,6 +76,9 @@ function Routes() {
           setReservations={setReservations}
           setTables={setTables}
         />
+      </Route>
+      <Route path="/credits">
+        <Credits />
       </Route>
 
       <Route path="/search">

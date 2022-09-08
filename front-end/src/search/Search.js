@@ -20,31 +20,42 @@ export default function Search() {
   };
 
   return (
-    <>
+    <section className="container">
       <form onSubmit={searchHandler}>
-        <label htmlFor="search">
-          <input
-            id="mobile_number"
-            name="mobile_number"
-            value={mobile_number}
-            placeholder="Enter a customer's phone number"
-            onChange={changeHandler}
-          />
-          <button type="submit" onClick={searchHandler}>
-            Find
-          </button>
-        </label>
-      </form>
-      <hr />
-      <h1>Search Results</h1>
-      {searchResults.length > 0
-        ? searchResults.map((reservation) => (
-            <Reservation
-              key={reservation.reservation_id}
-              reservation={reservation}
+        <div className="form-group text-center">
+          <label htmlFor="search">
+            <input
+              id="mobile_number"
+              name="mobile_number"
+              value={mobile_number}
+              placeholder="Enter a customer's phone number"
+              onChange={changeHandler}
+              className="form-control"
+              size="100"
             />
-          ))
-        : noResults}
-    </>
+            <button
+              type="submit"
+              onClick={searchHandler}
+              class="form-control btn btn-color"
+            >
+              Find
+            </button>
+          </label>
+        </div>
+      </form>
+
+      <hr />
+      <h1 className="text-center">Search Results</h1>
+      <div className="row row-cols-1 row-cols-md-4">
+        {searchResults.length > 0
+          ? searchResults.map((reservation) => (
+              <Reservation
+                key={reservation.reservation_id}
+                reservation={reservation}
+              />
+            ))
+          : noResults}
+      </div>
+    </section>
   );
 }

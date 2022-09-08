@@ -80,3 +80,29 @@ export function next(currentDate) {
   date.setDate(date.getDate() + 1);
   return asDateString(date);
 }
+
+export function formatAsStandardTime(time) {
+  time = time.split(":"); // convert to array
+
+  // fetch
+  const hours = Number(time[0]);
+  const minutes = Number(time[1]);
+  //const seconds = Number(time[2]);
+
+  // calculate
+  let timeValue;
+
+  if (hours > 0 && hours <= 12) {
+    timeValue = "" + hours;
+  } else if (hours > 12) {
+    timeValue = "" + (hours - 12);
+  } else if (hours === 0) {
+    timeValue = "12";
+  }
+
+  timeValue += minutes < 10 ? ":0" + minutes : ":" + minutes; // get minutes
+  //timeValue += seconds < 10 ? ":0" + seconds : ":" + seconds; // get seconds
+  timeValue += hours >= 12 ? " pm" : " am"; // get AM/PM
+
+  return timeValue;
+}

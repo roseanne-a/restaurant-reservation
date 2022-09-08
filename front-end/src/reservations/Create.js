@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { createReservation } from "../utils/api";
-import { today } from "../utils/date-time";
-
-//import ErrorAlert from "../layout/ErrorAlert";
-import isFutureDate from "../utils/validation/isFutureDate";
+import {
+  isFutureDate,
+  isNotTuesday,
+  isDuringBusinessHours,
+  isFutureTime,
+} from "../utils/validDateAndTime";
 import classNames from "../utils/classNames";
-import isNotTuesday from "../utils/validation/isNotTuesday";
-import isDuringBusinessHours from "../utils/validation/isDuringBusinessHours";
-import isFutureTime from "../utils/validation/isFutureTime";
+import { formatAsDate, today } from "../utils/date-time";
 import ReservationForm from "./ReservationForm";
-import { formatAsDate } from "../utils/date-time";
 
 export default function Create() {
   const history = useHistory();
@@ -102,34 +101,36 @@ export default function Create() {
   };
 
   return (
-    <>
+    <section className="mb-5 d-flex flex-column">
       <h1>Create Reservation</h1>
-      <div
-        className={classNames({
-          "d-none": !errors.pastDateError.isError,
-          alert: errors.pastDateError.isError,
-          "alert-danger": errors.pastDateError.isError,
-        })}
-      >
-        {errors.pastDateError.errorMessage}
-      </div>
-      <div
-        className={classNames({
-          "d-none": !errors.tuesdayError.isError,
-          alert: errors.tuesdayError.isError,
-          "alert-danger": errors.tuesdayError.isError,
-        })}
-      >
-        {errors.tuesdayError.errorMessage}
-      </div>
-      <div
-        className={classNames({
-          "d-none": !errors.hoursError.isError,
-          alert: errors.hoursError.isError,
-          "alert-danger": errors.hoursError.isError,
-        })}
-      >
-        {errors.hoursError.errorMessage}
+      <div className="container justify-content-center">
+        <div
+          className={classNames({
+            "d-none": !errors.pastDateError.isError,
+            alert: errors.pastDateError.isError,
+            "alert-danger": errors.pastDateError.isError,
+          })}
+        >
+          {errors.pastDateError.errorMessage}
+        </div>
+        <div
+          className={classNames({
+            "d-none": !errors.tuesdayError.isError,
+            alert: errors.tuesdayError.isError,
+            "alert-danger": errors.tuesdayError.isError,
+          })}
+        >
+          {errors.tuesdayError.errorMessage}
+        </div>
+        <div
+          className={classNames({
+            "d-none": !errors.hoursError.isError,
+            alert: errors.hoursError.isError,
+            "alert-danger": errors.hoursError.isError,
+          })}
+        >
+          {errors.hoursError.errorMessage}
+        </div>
       </div>
 
       <ReservationForm
@@ -137,6 +138,6 @@ export default function Create() {
         setReservationData={setNewReservation}
         handleSubmit={handleSubmit}
       />
-    </>
+    </section>
   );
 }

@@ -6,13 +6,19 @@ export default function DateNav({ date }) {
   const history = useHistory();
 
   return (
-    <>
-      <button onClick={() => history.push(`/dashboard?date=${previous(date)}`)}>
-        Previous
+    <div className="p-3">
+      <button
+        className="btn btn-color"
+        onClick={() => history.push(`/dashboard?date=${previous(date)}`)}
+      >
+        &le;&le; {previous(date)}
       </button>
-      <button onClick={() => history.push(`/dashboard?date=${next(date)}`)}>
-        Next
+      <button
+        className="btn btn-color"
+        onClick={() => history.push(`/dashboard?date=${next(date)}`)}
+      >
+        {next(date)} &gt;&gt;
       </button>
-    </>
+    </div>
   );
 }
