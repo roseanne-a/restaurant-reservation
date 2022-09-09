@@ -10,9 +10,8 @@ import {
 import classNames from "../utils/classNames";
 import { formatAsDate, today } from "../utils/date-time";
 import ReservationForm from "./ReservationForm";
-import { listReservations } from "../utils/api";
 
-export default function Create({ reservations, setReservations }) {
+export default function Create() {
   const history = useHistory();
 
   const initialFormState = {
@@ -46,11 +45,12 @@ export default function Create({ reservations, setReservations }) {
   const [errors, setErrors] = useState({ ...initialErrorState });
   let errorExists = false;
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     errorExists = false;
     setErrors({ ...initialErrorState });
     const { reservation_date, reservation_time } = newReservation;
+    newReservation.reservation_date = formatAsDate(reservation_date);
 
     if (!isFutureDate(reservation_date)) {
       setErrors((errors) => {
@@ -89,20 +89,15 @@ export default function Create({ reservations, setReservations }) {
       errorExists = true;
     }
     if (!errorExists) {
-      let dateFormatted = formatAsDate(reservation_date);
       newReservation.people = Number(newReservation.people);
-      try {
-        const createdReservation = await createReservation(newReservation);
-        setReservations([...reservations, createdReservation]);
-        setNewReservation({ ...initialFormState });
-      } catch (e) {
-        console.log(e);
-      }
-
-      history.push({
-        pathname: `/dashboard`,
-        search: `?date=${dateFormatted}`,
-      });
+      createReservation(newReservation)
+        .then(setNewReservation({ ...initialFormState }))
+        .then(
+          history.push({
+            pathname: `/dashboard`,
+            search: `?date=${formatAsDate(reservation_date)}`,
+          })
+        );
     }
   };
 
