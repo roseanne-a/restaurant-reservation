@@ -120,8 +120,8 @@ export default function Seat({ tables }) {
             ))}
           </select>
         </label>
-        <button type="submit">Submit</button>
-        <button type="button" onClick={() => history.goBack()}>
+        <button type="submit btn btn-color">Submit</button>
+        <button type="button btn btn-danger" onClick={() => history.goBack()}>
           Cancel
         </button>
       </form>
