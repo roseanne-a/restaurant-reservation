@@ -22,7 +22,6 @@ import Credits from "../site/Credits";
  */
 
 function Routes() {
-  //const history = useHistory();
   const query = useQuery();
   let dateQuery = query.get("date");
   let date = today();

@@ -14,8 +14,9 @@ import classNames from "../utils/classNames";
 import ReservationForm from "./ReservationForm";
 import { today, formatAsDate } from "../utils/date-time";
 import { listReservations } from "../utils/api";
+import Reservations from "./Reservations";
 
-export default function Edit({ setReservations }) {
+export default function Edit({ reservations, setReservations }) {
   const { reservation_id } = useParams();
   const history = useHistory();
 
@@ -114,7 +115,13 @@ export default function Edit({ setReservations }) {
       reservation.people = Number(reservation.people);
       await editReservation(reservation_id, reservation);
 
-      setReservations(await listReservations({ reservation_date }));
+      setReservations([
+        ...reservations.map((currentReservation) =>
+          currentReservation.reservation_id === reservation_id
+            ? { ...currentReservation, reservation }
+            : currentReservation
+        ),
+      ]);
 
       history.push({
         pathname: `/dashboard`,

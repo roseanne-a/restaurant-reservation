@@ -12,7 +12,7 @@ import { formatAsDate, today } from "../utils/date-time";
 import ReservationForm from "./ReservationForm";
 import { listReservations } from "../utils/api";
 
-export default function Create({ setReservations }) {
+export default function Create({ reservations, setReservations }) {
   const history = useHistory();
 
   const initialFormState = {
@@ -89,15 +89,19 @@ export default function Create({ setReservations }) {
       errorExists = true;
     }
     if (!errorExists) {
+      let dateFormatted = formatAsDate(reservation_date);
       newReservation.people = Number(newReservation.people);
-
-      await createReservation(newReservation);
-      setNewReservation({ ...initialFormState });
-      setReservations(await listReservations({ reservation_date }));
+      try {
+        const createdReservation = await createReservation(newReservation);
+        setReservations([...reservations, createdReservation]);
+        setNewReservation({ ...initialFormState });
+      } catch (e) {
+        console.log(e);
+      }
 
       history.push({
         pathname: `/dashboard`,
-        search: `?date=${formatAsDate(reservation_date)}`,
+        search: `?date=${dateFormatted}`,
       });
     }
   };
