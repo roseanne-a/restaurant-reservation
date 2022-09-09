@@ -13,8 +13,6 @@ import {
 import classNames from "../utils/classNames";
 import ReservationForm from "./ReservationForm";
 import { today, formatAsDate } from "../utils/date-time";
-import { listReservations } from "../utils/api";
-import Reservations from "./Reservations";
 
 export default function Edit({ reservations, setReservations }) {
   const { reservation_id } = useParams();
